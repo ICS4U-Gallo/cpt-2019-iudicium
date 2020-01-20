@@ -382,7 +382,7 @@ class Chapter2View(arcade.View):
                 self.player.display_score(self.get_total_time())
                 self.end_screen = True
 
-        if key == arcade.key.ESCAPE and self.end_screen:
+        if key == arcade.key.ESCAPE:
             self.director.next_view()
 
     def on_key_release(self, key, modifiers):

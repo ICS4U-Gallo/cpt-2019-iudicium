@@ -366,9 +366,11 @@ class MyGame(arcade.View):
             self.introduction = False
         elif key == arcade.key.ESCAPE:
             # arcade.close_window()
+            self.view_bottom = 0
+            self.view_left = 0
             self.director.next_view()
 
-        elif key == arcade.key.K:
+        elif key == arcade.key.K and not self.introduction:
             key_k = True
             # sort the distances of the keys
             self.sort_key(self.key.all_keys)
