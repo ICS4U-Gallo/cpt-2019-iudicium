@@ -229,7 +229,8 @@ class Chapter2View(arcade.View):
         self.information_text = "Welcome to Jump Game!\nPress Right/Left key to move\n" \
                                 "Press Space to jump, the longer you press, the higher you jump\n" \
                                 "Collect all the coins and press 'E' in front of the terminal door\n" \
-                                "The orange button will give you direction support. Good Luck!"
+                                "The orange button will give you direction support. Good Luck!\n" \
+                                "Or you can press 'ESC' to exit"
 
     def get_total_time(self):
         return self._Total_time
@@ -383,6 +384,7 @@ class Chapter2View(arcade.View):
                 self.end_screen = True
 
         if key == arcade.key.ESCAPE:
+            arcade.set_viewport(0, settings.WIDTH, 0, settings.HEIGHT)
             self.director.next_view()
 
     def on_key_release(self, key, modifiers):
