@@ -384,6 +384,7 @@ class Chapter2View(arcade.View):
                 self.end_screen = True
 
         if key == arcade.key.ESCAPE:
+            arcade.set_viewport(0, settings.WIDTH, 0, settings.HEIGHT)
             self.director.next_view()
 
     def on_key_release(self, key, modifiers):
