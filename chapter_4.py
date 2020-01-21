@@ -137,7 +137,8 @@ def fish(self):
             self.all_sprite_list.append(self.fish)
 
     # Checks for collision between Player and Fish
-    if len(self.fish_list) <= 1 and arcade.check_for_collision_with_list(self.player, self.fish_list):
+    if len(self.fish_list) <= 1 and
+    arcade.check_for_collision_with_list(self.player, self.fish_list):
         self.player_health += self.fish.get_recovery_points()
         self.fish.remove_from_sprite_lists()
         fish(self)
