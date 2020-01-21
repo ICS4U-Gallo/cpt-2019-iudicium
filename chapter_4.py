@@ -233,7 +233,7 @@ class gameView(arcade.View):
         self.all_sprite_list.append(self.player)
 
         # SLIME Sprite
-        for i in range(2):
+        for i in range(8):
             slime_sprite = Slime("Sprites/slimeGreen.png", 0.5)
 
             slime_sprite.center_x = random.randrange(5, settings.WIDTH - 5)
