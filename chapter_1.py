@@ -165,7 +165,7 @@ class MyGame(arcade.View):
               a sorted sprite list
         """
         for key in key_list:
-            if key._type == target:
+            if key.get_type() == target:
                 self.flag_k = True
                 return self.flag_k
         return self.flag_k
