@@ -91,8 +91,7 @@ class Player(arcade.Sprite):
         if (self.left < 212 and self.right > 200 and self.top > 111 and
             self.bottom < 213):
             self.left = 212
-        if (self.right > 185 and self.left < 312 and self.bottom < 21 and
-            self.top > 88):
+        if (self.right > 185 and self.left < 312 and self.top > 88 and self.top < 100):
             self.top = 88
         if (self.bottom < 111 and self.bottom > 100 and self.left >= 212 and
             self.left < 311):
@@ -108,11 +107,10 @@ class Player(arcade.Sprite):
         if (self.right > 590 and self.left < 586 and self.top > 88 and
             self.bottom < 213):
             self.left = 586
-        if (self.right > 560 and self.right < 582 and self.top > 111 and
+        if (self.right > 560 and self.left < 582 and self.top > 111 and
             self.bottom < 213):
             self.right = 560
-        if (self.right > 462 and self.left < 586 and self.bottom < 21 and
-            self.top > 88):
+        if (self.right > 462 and self.left < 586 and self.top > 88 and self.top < 100):
             self.top = 88
         if (self.bottom < 111 and self.bottom > 100 and self.right <= 560 and
             self.right > 462):
@@ -192,8 +190,16 @@ class Puzzle:
         """ Checks if the puzzle is solved
         and the buttons are all pressed in the right order
         """
-        if self._puzzle == Puzzle.solution:
-            return True
+        checker = 0
+        if len(self._puzzle) == 4:
+            for i, num in enumerate(self._puzzle):
+                if num == Puzzle.solution[checker]:
+                    if i == checker:
+                        checker +=1
+            if checker == 4:
+                return True
+            else:
+                return False
 
 
 class ch3_MenuView(arcade.View):
@@ -391,6 +397,47 @@ class Ch3View(arcade.View):
         elif value is 4:
             self.button_4 = arcade.Sprite(settings.button, .7, 0, 0, 0, 0, 750,
                                           75)
+    def on_mouse_press(self, x, y, button, modifiers):
+        print(x, y)
+    def button_reset(self):
+        """ This resets all the buttons to off position and removes all value
+        """ 
+        self.button_1 = arcade.Sprite(settings.button, .7, 0, 0, 0, 0, 50,
+                                      570)
+        self.button_2 = arcade.Sprite(settings.button, .7, 0, 0, 0, 0, 50,
+                                      75)
+        self.button_3 = arcade.Sprite(settings.button, .7, 0, 0, 0, 0, 750,
+                                      570)
+        self.button_4 = arcade.Sprite(settings.button, .7, 0, 0, 0, 0, 750,
+                                      75)
+        a = [1, 2, 3, 4]
+        for i in a:
+            self.puzzle.remove_value(i)
+
+    def win(self):
+        """ Calculates the total time and star score
+            and saves it to a json file.
+            Continue to the next view.
+        """
+        with open("Chapter_3_score.json", 'r') as f:
+                game = json.load(f)
+        
+        # Calculate minutes
+        minutes = int(self.total_time) // 60
+
+        # Calculate seconds by using a modulus (remainder)
+        seconds = int(self.total_time) % 60
+
+        # Figure out our output
+        output = f"{minutes:02d}:{seconds:02d}"
+
+        game[output] = self.score
+
+        with open("Chapter_3_score.json", 'w') as f:
+            json.dump(game, f)
+
+        winView = WinView()
+        self.window.show_view(winView)
 
     def star_sprite(self):
         """ Creates a Sprite list of the star sprite when called
@@ -466,25 +513,12 @@ class Ch3View(arcade.View):
                 star.kill()
                 self.score += 1
 
-        if self.puzzle.checker() is True:
-            with open("Chapter_3_score.json", 'r') as f:
-                game = json.load(f)
-            # Calculate minutes
-            minutes = int(self.total_time) // 60
+        if self.puzzle.checker() == True:
+            self.win()
 
-            # Calculate seconds by using a modulus (remainder)
-            seconds = int(self.total_time) % 60
+        if self.puzzle.checker() is False:
+            self.button_reset()
 
-            # Figure out our output
-            output = f"{minutes:02d}:{seconds:02d}"
-
-            game[output] = self.score
-
-            with open("Chapter_3_score.json", 'w') as f:
-                json.dump(game, f)
-
-            winView = WinView()
-            self.window.show_view(winView)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
@@ -525,7 +559,8 @@ class Ch3View(arcade.View):
                   self.puzzle.value_checker(self.puzzle.clone_puzzle(), 2) is False):
                 self.button_on(2)
                 self.star_2 += 1
-                if self.star_2 == 1:
+                if (self.star_2 == 1 and self.puzzle.value_checker(self.puzzle.clone_puzzle(), 1)
+                    and self.puzzle.value_checker(self.puzzle.clone_puzzle(), 4)):
                     self.star_sprite()
                 self.puzzle.add_value(2)
 
@@ -549,7 +584,9 @@ class Ch3View(arcade.View):
                   self.puzzle.value_checker(self.puzzle.clone_puzzle(), 4) is False):
                 self.button_on(4)
                 self.star_3 += 1
-                if self.star_3 == 1:
+                if (self.star_3 == 1 and
+                    self.puzzle.value_checker(self.puzzle.clone_puzzle(), 1)
+                    and self.puzzle.value_checker(self.puzzle.clone_puzzle(), 2) is False):
                     self.star_sprite()
                 self.puzzle.add_value(4)
 
@@ -679,18 +716,19 @@ class Scoreboard(arcade.View):
                          font_size=15, anchor_x="center", anchor_y="center")
 
         placement = 1
-        h = 150  # Controls the Height of the text
+        h = 100  # Controls the Height of the text
         # Checks if there are more than five scores in the json file
-            # loops through the dictionary for the first 5 scores
-            # and places it on the screen
-        while placement < 5:
-            for key, value in game.items():
-                arcade.draw_text(f"{placement}. Time: {key}, Star Score: {game[key]}",
-                                -100, self.half_height + h,
-                                arcade.color.BLACK, 15, 1000, "center",
-                                'arial', True)
-                placement += 1
-                h -= 50  # Change in Height
+        # loops through the dictionary for the first 5 scores
+        # and places it on the screen
+        for key in self.new_keys[:5]:
+            m, s = divmod(key, 60)
+            time = f"{m:02d}:{s:02d}"
+            arcade.draw_text(f"{placement}. Time: {time} Star Score: {self.new_game[time]}",
+                             -98, self.half_height + h,
+                             arcade.color.BLACK, 20, 1000, "center",
+                             'arial', True)
+            placement += 1
+            h -= 50  # Change in Height
 
         arcade.draw_text("Press ENTER to CONTINUE", self.scoreboard.center_x,
                          self.scoreboard.center_y - 220,
@@ -716,9 +754,9 @@ if __name__ == "__main__":
     window = arcade.Window(settings.WIDTH, settings.HEIGHT)
     # my_view = ch3_MenuView()
     # my_view = Instructions()
-    # my_view = Ch3View()
+    my_view = Ch3View()
     # my_view = WinView()
-    my_view = Scoreboard()
+    # my_view = Scoreboard()
     my_view.director = FakeDirector(close_on_next_view=True)
     window.show_view(my_view)
     arcade.run()
