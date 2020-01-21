@@ -3,8 +3,10 @@
 A Tower of Trials game where you must complete different trials to win.
 
 Chapter 1(Johnson):
-
-Chapter 2(Fegel):
+    Meet Maze Runner: The most challenging maze you never play! Are you ready for the ordeal of God! 
+    Help the brave Alien to find the special key and get of the maze with high scores!
+    
+Chapter 2(Figo):
 
 Chapter 3(Marcus):
     A puzzle minigame where the player needs to press the buttons in a certain order with the help of a riddle that is given.
