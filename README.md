@@ -7,6 +7,7 @@ Chapter 1(Johnson):
 Chapter 2(Fegel):
 
 Chapter 3(Marcus):
+    
     A puzzle minigame where the player needs to press the buttons in a certain order with the help of a riddle that is given.
 
 Chapter 4(Stella):
