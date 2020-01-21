@@ -7,6 +7,7 @@ import random
 import json
 
 from typing import List
+from chapter_4 import ch4_MenuView
 
 # the player's speed
 speed = 10
@@ -730,7 +731,7 @@ class Scoreboard(arcade.View):
             placement += 1
             h -= 50  # Change in Height
 
-        arcade.draw_text("Press ENTER to CONTINUE", self.scoreboard.center_x,
+        arcade.draw_text("Press ANY KEY to CONTINUE", self.scoreboard.center_x,
                          self.scoreboard.center_y - 220,
                          arcade.color.BLACK, font_size=15, anchor_x="center",
                          anchor_y="center")
@@ -739,8 +740,9 @@ class Scoreboard(arcade.View):
         pass
 
     def on_key_press(self, key, modifiers):
-        if key == arcade.key.ENTER:
-            self.director.next_view()
+        arcade.set_viewport(0, settings.WIDTH, 0, settings.HEIGHT)
+        next_view = ch4_MenuView()
+        self.window.show_view(next_view)
 
 if __name__ == "__main__":
     """This section of code will allow you to run your View
@@ -752,11 +754,7 @@ if __name__ == "__main__":
     """
     from utils import FakeDirector
     window = arcade.Window(settings.WIDTH, settings.HEIGHT)
-    # my_view = ch3_MenuView()
-    # my_view = Instructions()
-    my_view = Ch3View()
-    # my_view = WinView()
-    # my_view = Scoreboard()
+    my_view = WinView()
     my_view.director = FakeDirector(close_on_next_view=True)
     window.show_view(my_view)
     arcade.run()
