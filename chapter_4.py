@@ -6,26 +6,61 @@ from typing import List
 import settings
 
 
-# Player
-player_speedx = 5
-player_speedy = 5
-player_strength = 25
-laser_speed = 8
-
-# Health Bar
-health_barx = 10
-health_bary = 570
-health_bar_height = 20
-health_bar_width = 200
-
-# Slime
-slime_strength = 10
-
-# Fish
-recovery_points = 15
-
-
 class Player(arcade.Sprite):
+    def __init__(self, filename, scale):
+        super().__init__(filename=filename, scale=scale)
+        self._player_speed = 5
+        self._player_strength = 25
+        self._laser_speed = 8
+
+        # Health Bar
+        self._health_barx = 10
+        self._health_bary = 570
+        self._health_bar_height = 20
+        self._health_bar_width = 200
+
+    def set_player_speed(self, value: int):
+        self._player_speed = value
+
+    def get_player_speed(self):
+        return self._player_speed
+
+    def set_player_strength(self, value: int):
+        self._player_strength = value
+
+    def get_player_strength(self):
+        return self._player_strength
+
+    def set_laser_speed(self, value: int):
+        self._laser_speed = value
+
+    def get_laser_speed(self):
+        return self._laser_speed
+
+    def set_health_barx(self, value: int):
+        self._health_barx = value
+
+    def get_health_barx(self):
+        return self._health_barx
+
+    def set_health_bary(self, value: int):
+        self._health_bary = value
+
+    def get_health_bary(self):
+        return self._health_bary
+
+    def set_health_bar_height(self, value: int):
+        self._health_bar_height = value
+
+    def get_health_bar_height(self):
+        return self._health_bar_height
+
+    def set_health_bar_width(self, value: int):
+        self._health_bar_width = value
+
+    def get_health_bar_width(self):
+        return self._health_bar_width
+
     def update(self):
         # Movement
         self.center_x += self.change_x
@@ -43,6 +78,16 @@ class Player(arcade.Sprite):
 
 
 class Slime(arcade.Sprite):
+    def __init__(self, filename, scale):
+        super().__init__(filename=filename, scale=scale)
+        self._slime_strength = 10
+
+    def set_slime_strength(self, value: int):
+        self._slime_strength = value
+
+    def get_slime_strength(self):
+        return self._slime_strength
+
     def update(self):
         # Movement
         self.center_x += self.change_x
@@ -55,14 +100,33 @@ class Slime(arcade.Sprite):
             self.change_y *= -1
 
 
-class Fish(Slime):
-    pass
+class Fish(arcade.Sprite):
+    def __init__(self, filename, scale):
+        super().__init__(filename=filename, scale=scale)
+        self._recovery_points = 15
+
+    def set_recovery_point(self, value: int):
+        self._recovery_points = value
+
+    def get_recovery_points(self):
+        return self._recovery_points
+
+    def update(self):
+        # Movement
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        # Boundaries
+        if self.left < 0 or self.right > settings.WIDTH:
+            self.change_x *= -1
+        if self.bottom < 0 or self.top > settings.HEIGHT:
+            self.change_y *= -1
 
 
 def fish(self):
-    "Draws a fish"
+    # Recursively Draws a Fish
     if len(self.fish_list) == 0:
-        if self.player_health <= 50 and self.frame_count % 200 == 0:
+        if self.player_health <= 50 and self.get_frame_count() % 200 == 0:
             self.fish = Fish("Sprites/fishPink.png", 0.3)
             self.fish.center_x = random.randrange(20, settings.WIDTH - 20)
             self.fish.center_y = random.randrange(20, settings.HEIGHT - 20)
@@ -72,8 +136,9 @@ def fish(self):
             self.fish_list.append(self.fish)
             self.all_sprite_list.append(self.fish)
 
+    # Checks for collision between Player and Fish
     if len(self.fish_list) <= 1 and arcade.check_for_collision_with_list(self.player, self.fish_list):
-        self.player_health += recovery_points
+        self.player_health += self.fish.get_recovery_points()
         self.fish.remove_from_sprite_lists()
         fish(self)
 
@@ -152,10 +217,10 @@ class Instructions(arcade.View):
 
         self.background = arcade.load_texture("Sprites/blackBackground.jpg")
 
-        self.slime = arcade.Sprite("Sprites/slimeGreen.png", 0.6)
+        self.slime = Slime("Sprites/slimeGreen.png", 0.6)
         self.slime.center_x = settings.WIDTH/2 - 70
         self.slime.center_y = 200
-        self.fish = arcade.Sprite("Sprites/fishPink.png", 0.6)
+        self.fish = Fish("Sprites/fishPink.png", 0.6)
         self.fish.center_x = settings.WIDTH/2 + 70
         self.fish.center_y = 190
 
@@ -207,16 +272,16 @@ class gameView(arcade.View):
         self.background = arcade.load_texture("Sprites/tiledFloor.jpg")
 
         # Frame Count
-        self.frame_count = 0
+        self._frame_count = 0
 
         # Timer
-        self.total_time = 0.0
+        self._total_time = 0.0
 
         # Total Lasers
-        self.total_lasers = 0
+        self._total_lasers = 0
 
         # Total Damage
-        self.total_damage = 0
+        self._total_damage = 0
 
         # Sprite Lists
         self.all_sprite_list = arcade.SpriteList()
@@ -233,7 +298,7 @@ class gameView(arcade.View):
         self.all_sprite_list.append(self.player)
 
         # SLIME Sprite
-        for i in range(2):
+        for i in range(8):
             slime_sprite = Slime("Sprites/slimeGreen.png", 0.5)
 
             slime_sprite.center_x = random.randrange(5, settings.WIDTH - 5)
@@ -248,6 +313,30 @@ class gameView(arcade.View):
             self.slime_list.append(slime_sprite)
             self.all_sprite_list.append(slime_sprite)
 
+    def set_frame_count(self, value: int):
+        self._frame_count = value
+
+    def get_frame_count(self):
+        return self._frame_count
+
+    def set_total_time(self, value: int):
+        self._total_time = value
+
+    def get_total_time(self):
+        return self._total_time
+
+    def set_total_lasers(self, value: int):
+        self._total_lasers = value
+
+    def get_total_lasers(self):
+        return self._total_lasers
+
+    def set_total_damage(self, value: int):
+        self._total_damage = value
+
+    def get_total_damage(self):
+        return self._total_damage
+
     def on_draw(self):
         arcade.start_render()
 
@@ -259,8 +348,8 @@ class gameView(arcade.View):
         self.all_sprite_list.draw()
 
         # Calculate time
-        minutes = int(self.total_time) // 60
-        seconds = int(self.total_time) % 60
+        minutes = int(self.get_total_time()) // 60
+        seconds = int(self.get_total_time()) % 60
 
         output = f"Time: {minutes:02d}:{seconds:02d}"
 
@@ -270,17 +359,20 @@ class gameView(arcade.View):
                          anchor_x="center")
 
         # Player Health Bar
-        arcade.draw_xywh_rectangle_filled(health_barx, health_bary,
-                                          health_bar_width,
-                                          health_bar_height,
+        arcade.draw_xywh_rectangle_filled(self.player.get_health_barx(),
+                                          self.player.get_health_bary(),
+                                          self.player.get_health_bar_width(),
+                                          self.player.get_health_bar_height(),
                                           arcade.color.BLACK)
-        arcade.draw_xywh_rectangle_filled(health_barx, health_bary,
+        arcade.draw_xywh_rectangle_filled(self.player.get_health_barx(),
+                                          self.player.get_health_bary(),
                                           self.player_health*2,
-                                          health_bar_height,
+                                          self.player.get_health_bar_height(),
                                           arcade.color.GUPPIE_GREEN)
-        arcade.draw_text(f"{self.player_health}/100", health_barx,
-                         health_bary - 25, arcade.color.BLACK,
-                         font_size=15)
+        arcade.draw_text(f"{self.player_health}/100",
+                         self.player.get_health_barx(),
+                         self.player.get_health_bary() - 25,
+                         arcade.color.BLACK, font_size=15)
 
         # Fish
         fish(self)
@@ -288,23 +380,23 @@ class gameView(arcade.View):
     def on_update(self, delta_time):
         self.all_sprite_list.update()
 
-        self.frame_count += 1
-        self.total_time += delta_time
+        self.set_frame_count(self.get_frame_count()+1)
+        self.set_total_time(self.get_total_time()+delta_time)
 
         # Player and Slime Collision
         collisions = arcade.check_for_collision_with_list(self.player, self.slime_list)
 
         # Decrease Player Health when collision with slime and every 10 frames
         for collision in collisions:
-            if self.frame_count % 10 == 0:
-                self.total_damage += slime_strength
-                self.player_health -= slime_strength
+            if self.get_frame_count() % 10 == 0:
+                self.set_total_damage(self.get_total_damage()+self.slime_list[0].get_slime_strength())
+                self.player_health -= self.slime_list[0].get_slime_strength()
 
         # Player Attacks Slime
         for slime in self.slime_list:
             for laser in self.laser_list:
                 if arcade.check_for_collision(laser, slime):
-                    slime.health -= player_strength
+                    slime.health -= self.player.get_player_strength()
                     laser.remove_from_sprite_lists()
 
             # Laser flies off screen
@@ -325,7 +417,10 @@ class gameView(arcade.View):
             with open("chapter_4_scores.json") as json_file:
                 data = json.load(json_file)
 
-            game_stats = {"Total Time": round(self.total_time, 2), "Total Damage": self.total_damage, "Total Lasers Used": self.total_lasers}
+            game_stats = {"Total Time": round(self.get_total_time(), 2),
+                          "Total Damage": self.get_total_damage(),
+                          "Total Lasers Used": self.get_total_lasers()}
+
             data["game_stats"].append(game_stats)
 
             with open("chapter_4_scores.json", "w") as f:
@@ -354,23 +449,23 @@ class gameView(arcade.View):
         self.laser.angle = math.degrees(angle)
 
         # Laser Speed
-        self.laser.change_x = math.cos(angle) * laser_speed
-        self.laser.change_y = math.sin(angle) * laser_speed
+        self.laser.change_x = math.cos(angle) * self.player.get_laser_speed()
+        self.laser.change_y = math.sin(angle) * self.player.get_laser_speed()
 
         # Add laser to list and update total laser count
-        self.total_lasers += 1
+        self.set_total_lasers(self.get_total_lasers()+1)
         self.laser_list.append(self.laser)
         self.all_sprite_list.append(self.laser)
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.W:
-            self.player.change_y = player_speedy
+            self.player.change_y = self.player.get_player_speed()
         elif key == arcade.key.S:
-            self.player.change_y = -player_speedy
+            self.player.change_y = -self.player.get_player_speed()
         elif key == arcade.key.D:
-            self.player.change_x = player_speedx
+            self.player.change_x = self.player.get_player_speed()
         elif key == arcade.key.A:
-            self.player.change_x = -player_speedx
+            self.player.change_x = -self.player.get_player_speed()
         elif key == arcade.key.ESCAPE:
             arcade.close_window()
 
@@ -440,7 +535,7 @@ class winView(arcade.View):
                          anchor_x="center", anchor_y="center")
 
         arcade.draw_text("""Press ENTER to see Scoreboard
-    
+
     Press SPACE to Play Again
 
     Press ESC to Exit Game""", settings.WIDTH/2, settings.HEIGHT/2 - 100,
