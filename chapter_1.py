@@ -105,7 +105,7 @@ class MyGame(arcade.View):
     def key_place_success(self, key_placed_successfully: bool,
                           normal_key: Key,
                           x_list: List[float],
-                          y_list: List[float]) -> tuple[float, float]:
+                          y_list: List[float]) -> tuple:
         """
         Use recursion to check if key place is successful
         Attrs:
