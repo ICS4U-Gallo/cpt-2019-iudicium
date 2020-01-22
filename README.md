@@ -8,7 +8,7 @@ Chapter 1(Johnson):
     
 Chapter 2(Figo):
     A jump game where player needs to press space and jump on to different places, they can finish this game when
-    they are get to the final door.
+    they get to the final door.
 
 Chapter 3(Marcus):
     A puzzle minigame where the player needs to press the buttons in a certain order with the help of a riddle that is given.
