@@ -246,15 +246,15 @@ class Instructions(arcade.View):
 
         self.background = arcade.load_texture("Sprites/abstract-technology-particle-background_52683-25766.jpg")
 
-        self.button = arcade.Sprite("Sprites\switchGreen.png", 0.6)
+        self.button = arcade.Sprite("Sprites/switchGreen.png", 0.6)
         self.button.center_x = settings.WIDTH/2 - 70
         self.button.center_y = 200
 
-        self.button_pressed = arcade.Sprite("Sprites\switchGreen_pressed.png", 0.6)
+        self.button_pressed = arcade.Sprite("Sprites/switchGreen_pressed.png", 0.6)
         self.button_pressed.center_x = settings.WIDTH/2 + 70
         self.button_pressed.center_y = 200
 
-        self.star = arcade.Sprite("Sprites\star.png", 1)
+        self.star = arcade.Sprite("Sprites/star.png", 1)
         self.star.center_x = settings.WIDTH/2 - 100
         self.star.center_y = settings.HEIGHT / 2
 
@@ -444,7 +444,7 @@ class Ch3View(arcade.View):
         """ Creates a Sprite list of the star sprite when called
         """
         for _ in range(5):
-            star = arcade.Sprite("Sprites\star.png", .8)
+            star = arcade.Sprite("Sprites/star.png", .8)
             star.center_x = random.randrange(0, settings.WIDTH)
             star.center_y = random.randrange(0, settings.HEIGHT)
             self.star_sprites.append(star)
