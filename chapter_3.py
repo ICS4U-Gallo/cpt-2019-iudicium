@@ -343,9 +343,9 @@ class Ch3View(arcade.View):
         self.half_width = settings.WIDTH * .5
         self.half_height = settings.HEIGHT * .5
         self.player = Player("Sprites/alienBlue_front.png", .4, 0, 0, 0, 0, 400, 300)
-        self.text_sprite = arcade.Sprite("Sprites\Brown.png", 0.5, 0, 0, 0, 0, 400, 590)
+        self.text_sprite = arcade.Sprite("Sprites/Brown.png", 0.5, 0, 0, 0, 0, 400, 590)
         self.background = arcade.load_texture("Sprites/brown-stone-seamless-background-vector-illustration-game-texture-68967465.jpg")
-        self.riddle = Riddle("Sprites\DialogueBox.png", 1, 0, 0, 0, 0,
+        self.riddle = Riddle("Sprites/DialogueBox.png", 1, 0, 0, 0, 0,
                              settings.WIDTH / 2, settings.HEIGHT / 2 - 100)
         self.star_sprites = arcade.SpriteList()
         self.x = 0  # Controls whether or not the riddle is shown
