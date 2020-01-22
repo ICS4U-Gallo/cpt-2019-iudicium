@@ -344,7 +344,7 @@ class Ch3View(arcade.View):
         self.half_height = settings.HEIGHT * .5
         self.player = Player("Sprites/alienBlue_front.png", .4, 0, 0, 0, 0, 400, 300)
         self.text_sprite = arcade.Sprite("Sprites/Brown.png", 0.5, 0, 0, 0, 0, 400, 590)
-        self.background = arcade.load_texture("Sprites/brown-stone-seamless-background-vector-illustration-game-texture-68967465.jpg")
+        self.background = arcade.load_texture("""Sprites/brown-stone-seamless-background-vector-illustration-game-texture-68967465.jpg""")
         self.riddle = Riddle("Sprites/DialogueBox.png", 1, 0, 0, 0, 0,
                              settings.WIDTH / 2, settings.HEIGHT / 2 - 100)
         self.star_sprites = arcade.SpriteList()
@@ -754,7 +754,7 @@ if __name__ == "__main__":
     """
     from utils import FakeDirector
     window = arcade.Window(settings.WIDTH, settings.HEIGHT)
-    my_view = WinView()
+    my_view = ch3_MenuView()
     my_view.director = FakeDirector(close_on_next_view=True)
     window.show_view(my_view)
     arcade.run()
