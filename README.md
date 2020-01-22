@@ -1,6 +1,20 @@
 # Iudicium
 
-Program description. Replace with description of your program. Give a description of each scene.
+A Tower of Trials game where you must complete different trials to win.
+
+Chapter 1(Johnson):
+    Meet Maze Runner: The most challenging maze you never play! Are you ready for the ordeal of God! 
+    Help the brave Alien to find the special key and get of the maze with high scores!
+    
+Chapter 2(Figo):
+    A jump game where player needs to press space and jump on to different places, they can finish this game when
+    they get to the final door.
+
+Chapter 3(Marcus):
+    A puzzle minigame where the player needs to press the buttons in a certain order with the help of a riddle that is given.
+
+Chapter 4(Stella):
+    A shooter game in which the player must defeat all the enemies in order to complete the trial. The time it takes to complete the         game is recorded; so the shorter you take, the higher you score!
 
 ### Group Members:
 

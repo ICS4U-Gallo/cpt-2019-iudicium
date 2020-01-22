@@ -65,8 +65,21 @@ class Key(arcade.Sprite):
 
 
 class MyGame(arcade.View):
-    """
-    All the game function are created in this class
+    """All the game function are created in this class（inherit for arcade.view class
+    Attributes:
+        self.player_list(List[Sprite]): list of the player
+        self.wall_list(List[Sprite]): list of walls
+        self.background(List[Sprite]): list of background
+        self.key(Key):represent the Key class
+        self.door(List[Sprite]): list of door
+        self.score(int): number of keys player have
+        self.player_sprite(Sprite): the player
+        self.view_bottom(int): the init view
+        self.view_left (int): the init view
+        self.frime_count(int): count the frame
+        self.flag_k(bool): flag to check if the player press k
+        self.introduction(bool): init the introduction
+        self.endWindow(bool): flag to check the ending
     """
 
     def __init__(self):
@@ -74,7 +87,6 @@ class MyGame(arcade.View):
 
         self.player_list = None
         self.wall_list = None
-        self.key_list = None
         self.key = Key(None, TILE_SCALING, None)
         self.door = None
         self.score = None
@@ -90,8 +102,10 @@ class MyGame(arcade.View):
         arcade.set_background_color(arcade.color.BLACK)
         self.setup()
 
-    def key_place_success(self, key_placed_successfully: bool, normal_key: arcade.Sprite, x_list: List[int],
-                          y_list: List[int]):
+    def key_place_success(self, key_placed_successfully: bool,
+                          normal_key: Key,
+                          x_list: List[float],
+                          y_list: List[float]) -> tuple:
         """
         Use recursion to check if key place is successful
         Attrs:
@@ -102,6 +116,7 @@ class MyGame(arcade.View):
 
         Return:
            the position of the key (x, y)
+
         """
         if key_placed_successfully:
             return normal_key.center_x, normal_key.center_y
@@ -110,7 +125,7 @@ class MyGame(arcade.View):
 
         # See if the key is hitting a wall, hitting another key, or too close from each other
         wall_hit_list = arcade.check_for_collision_with_list(normal_key, self.wall_list)
-        key_hit_list = arcade.check_for_collision_with_list(normal_key, self.key_list)
+        key_hit_list = arcade.check_for_collision_with_list(normal_key, self.key.all_keys)
         flag = True
         for item_x in x_list:
             if abs(int(item_x - normal_key.center_x)) < 30:
@@ -124,7 +139,7 @@ class MyGame(arcade.View):
         return self.key_place_success(key_placed_successfully, normal_key, x_list, y_list)
 
     # sort the distances between each key and the player
-    def sort_key(self, key_list) -> List:
+    def sort_key(self, key_list: List[Key]) -> List[Key]:
         """
         Use bubble sort to sort all the keys in the list by distances.
         Sort the distance from the closest to the furthest
@@ -153,9 +168,9 @@ class MyGame(arcade.View):
 
                     key_list = new_sprite
         self.key.all_keys = key_list
-        return key_list
+        return self.key.all_keys
 
-    def linear_search_key(self, target: str, key_list: List) -> bool:
+    def linear_search_key(self, target: str, key_list: List[Key]) -> bool:
         """
           Use linear search to check if the special key is in the key list
           Args:
